@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 
 namespace Skinet.Api
@@ -28,13 +29,14 @@ namespace Skinet.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Skinet.Api", Version = "v1" });
             });
 
-            services.AddDbContext<StoreContext>(x =>
+            services.AddDbContext<StoreContext>(options =>
             {
-                x.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
