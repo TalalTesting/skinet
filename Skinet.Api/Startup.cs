@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Skinet.Api.Helpers;
 using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 
@@ -34,7 +36,9 @@ namespace Skinet.Api
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,6 +53,8 @@ namespace Skinet.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

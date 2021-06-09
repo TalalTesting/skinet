@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
+using Skinet.Core.Specifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,11 +14,6 @@ namespace Skinet.Infrastructure.Data
         public ProductRepository(StoreContext context)
         {
             _context = context;
-        }
-
-        public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
-        {
-            return await _context.ProductBrands.ToListAsync();
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
@@ -34,6 +30,11 @@ namespace Skinet.Infrastructure.Data
                 .Include(p => p.ProductBrand)
                 .Include(p => p.ProductType)
                 .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
+        {
+            return await _context.ProductBrands.ToListAsync();
         }
 
         public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
