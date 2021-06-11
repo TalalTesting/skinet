@@ -20,6 +20,15 @@ namespace Skinet.Infrastructure.Data
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
+            //Method 2:
+            //foreach (var include in spec.Includes)
+            //{
+            //    query = query.Include(include);
+            //}
+
+            //Method 3:
+            //spec.Includes.ForEach(include => query = query.Include(include));
+
             return query;
         }
     }

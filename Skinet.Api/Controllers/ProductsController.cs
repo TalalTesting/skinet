@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skinet.Api.Dtos;
+using Skinet.Api.Errors;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Skinet.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         private readonly IGenericRepository<Product> _productsRepo;
         private readonly IGenericRepository<ProductBrand> _brandsRepo;
@@ -31,7 +30,7 @@ namespace Skinet.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
         {
             var spec = new ProductsWithTypesAndBrandsSpecification();
@@ -43,10 +42,17 @@ namespace Skinet.Api.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
+
             var product = await _productsRepo.GetEntityWithSpec(spec);
+
+            if (product == null)
+                return NotFound(new ApiResponse(404));
+
             var productToReturn = _mapper.Map<ProductToReturnDto>(product);
 
             return Ok(productToReturn);
