@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skinet.Api.Dtos;
 using Skinet.Api.Errors;
+using Skinet.Api.Helpers;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
@@ -30,18 +31,30 @@ namespace Skinet.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        [HttpGet]
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
+            [FromQuery]ProductSpecParams productParams)
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification();
-            var products = await _productsRepo.ListAllAsync(spec);
-            var productsToReturn = _mapper.Map<List<ProductToReturnDto>>(products);
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
 
-            return Ok(productsToReturn);
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+
+            var totalItems = await _productsRepo.CountAsync(countSpec);
+
+            var products = await _productsRepo.ListAllAsync(spec);
+
+            var data = _mapper.Map<List<ProductToReturnDto>>(products);
+
+            var response = new Pagination<ProductToReturnDto>(
+                productParams.PageIndex,
+                productParams.PageSize,
+                totalItems,
+                data);
+
+            return Ok(response);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
@@ -58,20 +71,20 @@ namespace Skinet.Api.Controllers
             return Ok(productToReturn);
         }
 
-        [HttpGet]
-        [Route("brands")]
-        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
-        {
-            var brands = await _brandsRepo.ListAllAsync();
-            return Ok(brands);
-        }
+        //[HttpGet]
+        //[Route("brands")]
+        //public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        //{
+        //    var brands = await _brandsRepo.ListAllAsync();
+        //    return Ok(brands);
+        //}
 
-        [HttpGet]
-        [Route("types")]
-        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
-        {
-            var types = await _typesRepo.ListAllAsync();
-            return Ok(types);
-        }
+        //[HttpGet]
+        //[Route("types")]
+        //public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        //{
+        //    var types = await _typesRepo.ListAllAsync();
+        //    return Ok(types);
+        //}
     }
 }

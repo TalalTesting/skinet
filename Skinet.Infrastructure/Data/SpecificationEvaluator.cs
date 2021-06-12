@@ -18,16 +18,18 @@ namespace Skinet.Infrastructure.Data
                 query = query.Where(spec.Criteria);
             }
 
+            if (spec.OrderBy != null)
+                query = query.OrderBy(spec.OrderBy);
+
+            if (spec.OrderByDescending != null)
+                query = query.OrderByDescending(spec.OrderByDescending);
+
+            if(spec.IsPagingEnabled)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
+
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
-
-            //Method 2:
-            //foreach (var include in spec.Includes)
-            //{
-            //    query = query.Include(include);
-            //}
-
-            //Method 3:
-            //spec.Includes.ForEach(include => query = query.Include(include));
 
             return query;
         }
