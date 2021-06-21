@@ -71,20 +71,20 @@ namespace Skinet.Api.Controllers
             return Ok(productToReturn);
         }
 
-        //[HttpGet]
-        //[Route("brands")]
-        //public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
-        //{
-        //    var brands = await _brandsRepo.ListAllAsync();
-        //    return Ok(brands);
-        //}
+        [HttpGet]
+        [Route("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            var brands = await _brandsRepo.ListAllAsync();
+            return Ok(brands);
+        }
 
-        //[HttpGet]
-        //[Route("types")]
-        //public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
-        //{
-        //    var types = await _typesRepo.ListAllAsync();
-        //    return Ok(types);
-        //}
+        [HttpGet]
+        [Route("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        {
+            var types = await _typesRepo.ListAllAsync();
+            return Ok(types);
+        }
     }
 }
