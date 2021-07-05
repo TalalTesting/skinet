@@ -7,6 +7,7 @@ using Skinet.Api.Extensions;
 using Skinet.Api.Helpers;
 using Skinet.Api.Middlewares;
 using Skinet.Infrastructure.Data;
+using StackExchange.Redis;
 
 namespace Skinet.Api
 {
@@ -28,6 +29,12 @@ namespace Skinet.Api
             services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var config = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(config);
             });
 
             services.AddApplicationServices();
