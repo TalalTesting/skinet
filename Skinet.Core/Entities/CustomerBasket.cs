@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Skinet.Core.Entities
 {
@@ -15,6 +14,6 @@ namespace Skinet.Core.Entities
         }
 
         public string Id { get; set; }
-        public List<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
+        public List<BasketItem> Items { get; set; } = new List<BasketItem>();
     }
 }
