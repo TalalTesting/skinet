@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Skinet.Api.Errors;
 using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
+using Skinet.Infrastructure.Services;
 using System.Linq;
 
 namespace Skinet.Api.Extensions
@@ -11,6 +12,7 @@ namespace Skinet.Api.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

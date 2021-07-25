@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skinet.Api.Dtos;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Skinet.Api.Controllers
 {
+    [Authorize]
     public class ProductsController : BaseApiController
     {
         private readonly IGenericRepository<Product> _productsRepo;
