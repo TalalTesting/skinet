@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Skinet.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ProductsController : BaseApiController
     {
         private readonly IGenericRepository<Product> _productsRepo;
