@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
-using Skinet.Core.Specifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

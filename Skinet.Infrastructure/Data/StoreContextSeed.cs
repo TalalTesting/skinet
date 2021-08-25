@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Skinet.Core.Entities;
+using Skinet.Core.Entities.OrderAggregate;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,6 +56,21 @@ namespace Skinet.Infrastructure.Data
                     foreach (var item in products)
                     {
                         context.Products.Add(item);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.DeliveryMethods.Any())
+                {
+                    var deliveryData =
+                        File.ReadAllText("../Skinet.Infrastructure/Data/SeedData/delivery.json");
+
+                    var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+                    foreach (var item in methods)
+                    {
+                        context.DeliveryMethods.Add(item);
                     }
 
                     await context.SaveChangesAsync();

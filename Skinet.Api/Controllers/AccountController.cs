@@ -7,14 +7,10 @@ using Skinet.Api.Errors;
 using Skinet.Api.Extensions;
 using Skinet.Core.Entities.Identity;
 using Skinet.Core.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Skinet.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
