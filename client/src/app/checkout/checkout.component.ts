@@ -15,13 +15,14 @@ export class CheckoutComponent implements OnInit {
   basketTotals$: Observable<IBasketTotals>;
   checkoutForm: FormGroup;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
     private accountService: AccountService,
     private basketService: BasketService) { }
 
   ngOnInit(): void {
     this.createCheckoutForm();
     this.getAddressFormValues();
+    this.getDeliveryMethodValue();
     this.basketTotals$ = this.basketService.basketTotal$;
   }
 
@@ -46,12 +47,20 @@ export class CheckoutComponent implements OnInit {
 
   getAddressFormValues() {
     this.accountService.getUserAddress().subscribe(address => {
-      if(address) {
+      if (address) {
         this.checkoutForm.get('addressForm').patchValue(address);
       }
     }, error => {
       console.log(error);
     });
+  }
+
+  getDeliveryMethodValue() {
+    const basket = this.basketService.getCurrentBasketValue();
+    if (basket.deliveryMethodId !== null) {
+      this.checkoutForm.get('deliveryForm').get('deliveryMethod').patchValue
+        (basket.deliveryMethodId.toString());
+    }
   }
 
 }
