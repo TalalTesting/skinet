@@ -3,6 +3,7 @@
     [totalItems]="this.totalCount" 
     [itemsPerPage]="this.pageSize"
     (pageChanged)="this.onPageChanged($event)" 
+    [ngModel]="pageNumber"
     previousText="&lsaquo;" 
     nextText="&rsaquo;" 
     firstText="&laquo;"

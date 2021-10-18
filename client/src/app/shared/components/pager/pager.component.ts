@@ -7,8 +7,9 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
   styleUrls: ['./pager.component.scss']
 })
 export class PagerComponent implements OnInit {
-  @Input() totalCount: number = 0;
-  @Input() pageSize: number = 0;
+  @Input() totalCount: number;
+  @Input() pageSize: number;
+  @Input() pageNumber: number;
   @Output() pageChanged = new EventEmitter<number>();
 
   constructor() { }
